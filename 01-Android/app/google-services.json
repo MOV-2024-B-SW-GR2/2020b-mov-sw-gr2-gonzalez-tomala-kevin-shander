@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "477301754487",
+    "project_id": "mov-2024b-sw-gr2-gtks",
+    "storage_bucket": "mov-2024b-sw-gr2-gtks.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:477301754487:android:8a7ce7ab6da187b0525472",
+        "android_client_info": {
+          "package_name": "com.example.gr2sw2024b_ksgt"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAezsaZbtAhxS2aABqS_3B_UKRrhNIxKVA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
