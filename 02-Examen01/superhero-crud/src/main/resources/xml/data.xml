@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<superheroes>
+    <superhero>
+        <id>1</id>
+        <name>Superman</name>
+        <isActive>true</isActive>
+        <debutDate>1938-06-01</debutDate>
+        <popularity>9.5</popularity>
+        <powers>
+            <power>
+                <id>1</id>
+                <name>Flight</name>
+                <description>Ability to fly</description>
+                <isOffensive>false</isOffensive>
+                <effectiveness>8.0</effectiveness>
+            </power>
+            <power>
+                <id>2</id>
+                <name>Super Strength</name>
+                <description>Immense physical strength</description>
+                <isOffensive>true</isOffensive>
+                <effectiveness>9.5</effectiveness>
+            </power>
+            <power>
+                <id>3</id>
+                <name>Heat Vision</name>
+                <description>Ability to emit powerful beams of heat from his eyes</description>
+                <isOffensive>true</isOffensive>
+                <effectiveness>9.0</effectiveness>
+            </power>
+        </powers>
+    </superhero>
+</superheroes>
