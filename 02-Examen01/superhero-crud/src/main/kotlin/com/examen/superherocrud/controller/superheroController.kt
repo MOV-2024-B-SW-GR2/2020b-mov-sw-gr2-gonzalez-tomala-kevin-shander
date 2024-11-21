@@ -11,7 +11,7 @@ class SuperheroController(private val service: SuperheroService) {
     fun getAllSuperheroes(): List<Superhero> = service.getAllSuperheroes()
 
     // Obtener un superhéroe por su ID
-    fun getSuperheroById(id: Int): Superhero? = service.getSuperheroById(id)
+    fun getSuperheroById(id: Int): Superhero = service.getSuperheroById(id)
 
     // Agregar un nuevo superhéroe
     fun addSuperhero(superhero: Superhero) = service.addSuperhero(superhero)

@@ -17,6 +17,9 @@ fun main() {
     val service = SuperheroService(repository)
     val controller = SuperheroController(service)
 
+    // Inicializar el contador de IDs basado en los datos existentes
+    Superhero.initializeIdCounter(controller.getAllSuperheroes())
+
     val scanner = Scanner(System.`in`)
 
     while (true) {
@@ -31,13 +34,12 @@ fun main() {
         println("8. Eliminar Poder de Superhéroe Existente")
         println("9. Salir")
         print("Elige una opción: ")
-        when (scanner.nextInt()) {
+        val option = scanner.nextInt()
+        scanner.nextLine()
+        when (option) {
             1 -> {
                 // Agregar Superhéroe
                 println("\n--- Agregar Superhéroe ---")
-                print("ID: ")
-                val id = scanner.nextInt()
-                scanner.nextLine()
                 print("Nombre: ")
                 val name = scanner.nextLine()
                 print("¿Está activo? (true/false): ")
@@ -53,9 +55,6 @@ fun main() {
                 val powers = mutableListOf<Power>()
                 println("\n--- Agregar Poderes ---")
                 while (true) {
-                    print("ID del Poder: ")
-                    val powerId = scanner.nextInt()
-                    scanner.nextLine()
                     print("Nombre del Poder: ")
                     val powerName = scanner.nextLine()
                     print("Descripción del Poder: ")
@@ -66,13 +65,14 @@ fun main() {
                     print("Efectividad (decimal): ")
                     val effectiveness = scanner.nextDouble()
                     scanner.nextLine()
-                    powers.add(Power(powerId, powerName, description, isOffensive, effectiveness))
+                    powers.add(Power(powerName, description, isOffensive, effectiveness))
 
                     print("¿Agregar otro poder? (y/n): ")
                     if (scanner.next() != "y") break
+                    scanner.nextLine()
                 }
 
-                val superhero = Superhero(id, name, isActive, debutDate, popularity, powers)
+                val superhero = Superhero(name, isActive, debutDate, popularity, powers)
                 controller.addSuperhero(superhero)
                 println("Superhéroe agregado exitosamente.")
             }
@@ -94,11 +94,7 @@ fun main() {
                 print("ID del Superhéroe: ")
                 val id = scanner.nextInt()
                 val superhero = controller.getSuperheroById(id)
-                if (superhero != null) {
-                    println("Superhéroe encontrado: ${superhero.showSuperheroDetails()}")
-                } else {
-                    println("Superhéroe no encontrado.")
-                }
+                println("Superhéroe encontrado: ${superhero.showSuperheroDetails()}")
             }
 
             4 -> {
@@ -106,28 +102,25 @@ fun main() {
                 println("\n--- Actualizar Superhéroe ---")
                 print("ID del Superhéroe a actualizar: ")
                 val id = scanner.nextInt()
+                scanner.nextLine()
                 val existingSuperhero = controller.getSuperheroById(id)
-                if (existingSuperhero != null) {
-                    print("Nuevo nombre (${existingSuperhero.getName()}): ")
-                    val name = scanner.next()
-                    print("¿Está activo? (${existingSuperhero.isActive()}) (true/false): ")
-                    val isActive = scanner.nextBoolean()
-                    print("Fecha de debut (${existingSuperhero.getDebutDate()}) (YYYY-MM-DD): ")
-                    val debutDate = LocalDate.parse(scanner.next())
-                    print("Popularidad (${existingSuperhero.getPopularity()}): ")
-                    val popularity = scanner.nextDouble()
+                print("Nuevo nombre (${existingSuperhero.getName()}): ")
+                val name = scanner.nextLine()
+                print("¿Está activo? (${existingSuperhero.isActive()}) (true/false): ")
+                val isActive = scanner.nextBoolean()
+                print("Fecha de debut (${existingSuperhero.getDebutDate()}) (YYYY-MM-DD): ")
+                val debutDate = LocalDate.parse(scanner.next())
+                print("Popularidad (${existingSuperhero.getPopularity()}): ")
+                val popularity = scanner.nextDouble()
 
-                    val updatedSuperhero = existingSuperhero.copy(
-                        name = name,
-                        isActive = isActive,
-                        debutDate = debutDate,
-                        popularity = popularity
-                    )
-                    controller.updateSuperhero(updatedSuperhero)
-                    println("Superhéroe actualizado exitosamente.")
-                } else {
-                    println("Superhéroe no encontrado.")
-                }
+                val updatedSuperhero = existingSuperhero.copy(
+                    name = name,
+                    isActive = isActive,
+                    debutDate = debutDate,
+                    popularity = popularity
+                )
+                controller.updateSuperhero(updatedSuperhero)
+                println("Superhéroe actualizado exitosamente.")
             }
 
             5 -> {
@@ -144,31 +137,25 @@ fun main() {
                 println("\n--- Agregar Poder a Superhéroe Existente ---")
                 print("ID del Superhéroe: ")
                 val superheroId = scanner.nextInt()
+                scanner.nextLine()
                 val superhero = controller.getSuperheroById(superheroId)
 
-                if (superhero != null) {
-                    println("Agregando nuevo poder al superhéroe ${superhero.getName()}.")
-                    print("ID del Poder: ")
-                    val powerId = scanner.nextInt()
-                    scanner.nextLine()
-                    print("Nombre del Poder: ")
-                    val powerName = scanner.nextLine()
-                    print("Descripción del Poder: ")
-                    val description = scanner.nextLine()
-                    print("¿Es ofensivo? (true/false): ")
-                    val isOffensive = scanner.nextBoolean()
-                    scanner.nextLine()
-                    print("Efectividad (decimal): ")
-                    val effectiveness = scanner.nextDouble()
-                    scanner.nextLine()
+                println("Agregando nuevo poder al superhéroe ${superhero.getName()}.")
+                print("Nombre del Poder: ")
+                val powerName = scanner.nextLine()
+                print("Descripción del Poder: ")
+                val description = scanner.nextLine()
+                print("¿Es ofensivo? (true/false): ")
+                val isOffensive = scanner.nextBoolean()
+                scanner.nextLine()
+                print("Efectividad (decimal): ")
+                val effectiveness = scanner.nextDouble()
+                scanner.nextLine()
 
-                    val newPower = Power(powerId, powerName, description, isOffensive, effectiveness)
-                    superhero.addPower(newPower)
-                    controller.updateSuperhero(superhero)
-                    println("Poder agregado exitosamente.")
-                } else {
-                    println("Superhéroe no encontrado.")
-                }
+                val newPower = Power(powerName, description, isOffensive, effectiveness)
+                superhero.addPower(newPower)
+                controller.updateSuperhero(superhero)
+                println("Poder agregado exitosamente.")
             }
 
             7 -> {
@@ -178,41 +165,37 @@ fun main() {
                 val superheroId = scanner.nextInt()
                 val superhero = controller.getSuperheroById(superheroId)
 
-                if (superhero != null) {
-                    println("Poderes actuales de ${superhero.getName()}:")
-                    superhero.getPowers().forEach { println(it.showPowerDetails()) }
+                println("Poderes actuales de ${superhero.getName()}:")
+                superhero.getPowers().forEach { println(it.showPowerDetails()) }
 
-                    print("ID del Poder a actualizar: ")
-                    val powerId = scanner.nextInt()
-                    val power = superhero.getPowers().find { it.getId() == powerId }
+                print("ID del Poder a actualizar: ")
+                val powerId = scanner.nextInt()
+                val power = superhero.getPowers().find { it.getId() == powerId }
 
-                    if (power != null) {
-                        scanner.nextLine()
-                        print("Nuevo nombre del Poder: ")
-                        val newName = scanner.nextLine()
-                        print("Nueva descripción: ")
-                        val newDescription = scanner.nextLine()
-                        print("¿Es ofensivo? (true/false): ")
-                        val newIsOffensive = scanner.nextBoolean()
-                        print("Nueva efectividad (decimal): ")
-                        val newEffectiveness = scanner.nextDouble()
-                        scanner.nextLine()
+                if (power != null) {
+                    scanner.nextLine()
+                    print("Nuevo nombre del Poder: ")
+                    val newName = scanner.nextLine()
+                    print("Nueva descripción: ")
+                    val newDescription = scanner.nextLine()
+                    print("¿Es ofensivo? (true/false): ")
+                    val newIsOffensive = scanner.nextBoolean()
+                    print("Nueva efectividad (decimal): ")
+                    val newEffectiveness = scanner.nextDouble()
+                    scanner.nextLine()
 
-                        val updatedPower = power.copy(
-                            name = newName,
-                            description = newDescription,
-                            isOffensive = newIsOffensive,
-                            effectiveness = newEffectiveness
-                        )
+                    val updatedPower = power.copy(
+                        name = newName,
+                        description = newDescription,
+                        isOffensive = newIsOffensive,
+                        effectiveness = newEffectiveness
+                    )
 
-                        superhero.updatePower(updatedPower)
-                        controller.updateSuperhero(superhero)
-                        println("Poder actualizado exitosamente.")
-                    } else {
-                        println("Poder no encontrado.")
-                    }
+                    superhero.updatePower(updatedPower)
+                    controller.updateSuperhero(superhero)
+                    println("Poder actualizado exitosamente.")
                 } else {
-                    println("Superhéroe no encontrado.")
+                    println("Poder no encontrado.")
                 }
             }
 
@@ -223,24 +206,14 @@ fun main() {
                 val superheroId = scanner.nextInt()
                 val superhero = controller.getSuperheroById(superheroId)
 
-                if (superhero != null) {
-                    println("Poderes actuales de ${superhero.getName()}:")
-                    superhero.getPowers().forEach { println(it.showPowerDetails()) }
+                println("Poderes actuales de ${superhero.getName()}:")
+                superhero.getPowers().forEach { println(it.showPowerDetails()) }
 
-                    print("ID del Poder a eliminar: ")
-                    val powerId = scanner.nextInt()
-                    val powerToRemove = superhero.getPowers().find { it.getId() == powerId }
-
-                    if (powerToRemove != null) {
-                        superhero.removePower(powerToRemove)
-                        controller.updateSuperhero(superhero)
-                        println("Poder eliminado exitosamente.")
-                    } else {
-                        println("Poder no encontrado.")
-                    }
-                } else {
-                    println("Superhéroe no encontrado.")
-                }
+                print("ID del Poder a eliminar: ")
+                val powerId = scanner.nextInt()
+                superhero.removePower(powerId)
+                controller.updateSuperhero(superhero)
+                println("Poder eliminado exitosamente.")
             }
 
             9 -> {
@@ -254,3 +227,4 @@ fun main() {
     }
     scanner.close()
 }
+
