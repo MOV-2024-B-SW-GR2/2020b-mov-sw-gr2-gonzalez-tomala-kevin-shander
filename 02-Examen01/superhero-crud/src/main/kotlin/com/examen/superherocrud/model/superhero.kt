@@ -3,106 +3,86 @@ package com.examen.superherocrud.model
 import java.time.LocalDate
 
 data class Superhero(
-    private val id: Int,
-    private val name: String,
-    // Indica si el superhéroe está activo
-    private val isActive: Boolean,
-    // Fecha de debut del superhéroe
-    private val debutDate: LocalDate,
-    // Nivel de popularidad del superhéroe
-    private val popularity: Double,
-    private val powers: MutableList<Power> = mutableListOf()
+    val id: Int,
+    val name: String,
+    val isActive: Boolean,
+    val debutDate: LocalDate,
+    val popularity: Double,
+    val powers: List<Power> = emptyList()
 ) {
+    init {
+        require(name.isNotBlank()) {
+            "El nombre del superhéroe no puede estar vacío."
+        }
+        require(popularity in 0.0..10.0) {
+            "La popularidad debe estar entre 0 y 10."
+        }
+        require(powers.distinctBy { it.id }.size == powers.size) {
+            "No se permiten poderes duplicados."
+        }
+    }
+
     companion object {
-        private var superheroIdCounter = 1 // Contador para los IDs de superhéroes
+        private var superheroIdCounter = 1
 
         fun generateId(): Int = superheroIdCounter++
 
-        fun initializeIdCounter(existingSuperheroes: List<Superhero>) {
-            superheroIdCounter = (existingSuperheroes.maxOfOrNull { it.getId() } ?: 0) + 1
+        fun initializeCounter(existingSuperheroes: List<Superhero>) {
+            superheroIdCounter = (existingSuperheroes.maxOfOrNull { it.id } ?: 0) + 1
         }
     }
 
-    init {
-        if(powers.isEmpty()) {
-            Power.resetCounter()
-        }
-        require(popularity in 0.0..10.0) {
-            "Popularity must be between 0 and 100."
-        }
-        require(name.isNotBlank()) {
-            "Name cannot be blank."
-        }
-        require(powers.distinctBy { it.getId() }.size == powers.size) {
-            "Duplicate powers are not allowed."
-        }
-    }
-
-    constructor(
-        name: String,
-        isActive: Boolean,
-        debutDate: LocalDate,
-        popularity: Double,
-        power: MutableList<Power>
-    ) : this(
-        id = generateId(),
-        name = name,
-        isActive = isActive,
-        debutDate = debutDate,
-        popularity = popularity,
-        powers = power
-    ) {
-        if(powers.isEmpty()) {
-            Power.resetCounter()
-        }
-    }
-
-    // Métodos para acceder a los atributos privados
-    fun getId() = id
-    fun getName() = name
-    fun isActive() = isActive
-    fun getDebutDate() = debutDate
-    fun getPopularity() = popularity
-    fun getPowers() = powers.toList() // Devuelve una copia inmutable de la lista de poderes
-
-    // Función para agregar un poder al superhéroe
-    fun addPower(power: Power) {
-        val existingIds = powers.map { it.getId() }
-        val newId = (existingIds.maxOrNull() ?: 0) + 1 // Generar un nuevo ID único
-        val newPower = Power(newId, power.getName(), power.getDescription(), power.isOffensive(), power.getEffectiveness())
-
-        if (existingIds.contains(newId)) {
-            throw IllegalArgumentException("Power with ID $newId already exists.")
-        }
-
-        powers.add(newPower)
-    }
-
-
-    // Actualizar un poder existente
-    fun updatePower(updatedPower: Power) {
-        val index = powers.indexOfFirst { it.getId() == updatedPower.getId() }
-        if (index != -1) {
-            powers[index] = updatedPower
+    fun showDetails(): String {
+        val powerDetails = if (powers.isEmpty()) {
+            "\tNo tiene poderes."
         } else {
-            throw IllegalArgumentException("Power with ID ${updatedPower.getId()} not found.")
+            powers.joinToString(separator = "\n") { "\t- ${it.showDetails()}" }
+        }
+        return "Superhero(id=$id, name='$name', isActive=$isActive, debutDate=$debutDate, popularity=$popularity)\n$powerDetails\n"
+    }
+
+    fun addPower(newPower: Power): Result<Superhero> {
+        return try {
+            // Generar un nuevo ID si el ID actual es 0
+            val powerWithId = if (newPower.id == 0) {
+                val existingIds = powers.map { it.id }
+                val newId = (existingIds.maxOrNull() ?: 0) + 1
+                newPower.copy(id = newId)
+            } else {
+                newPower
+            }
+            // Agregar el nuevo poder
+            Result.success(copy(powers = powers + powerWithId))
+        } catch (e: Exception) {
+            println("Error al agregar poder: ${e.message}")
+            Result.failure(e)
         }
     }
 
-    // Función para eliminar un poder del superhéroe
-    fun removePower(powerId: Int) {
-        if (!powers.removeIf { it.getId() == powerId }) {
-            throw IllegalArgumentException("Power with ID $powerId not found.")
+
+    fun updatePower(updatedPower: Power): Result<Superhero> {
+        return try {
+            val index = powers.indexOfFirst { it.id == updatedPower.id }
+            if (index == -1) {
+                throw IllegalArgumentException("No se encontró un poder con el ID ${updatedPower.id}.")
+            }
+            val updatedPowers = powers.toMutableList().apply { this[index] = updatedPower }
+            Result.success(copy(powers = updatedPowers))
+        } catch (e: Exception) {
+            println("Error al actualizar poder: ${e.message}")
+            Result.failure(e)
         }
     }
 
-    // Función para mostrar todos los poderes del superhéroe
-    private fun showAllPowers(): String {
-        return powers.joinToString(separator = "\n") { "- ${it.showPowerDetails()}" }
-    }
-
-    // Función para mostrar detalles del superhéroe
-    fun showSuperheroDetails(): String {
-        return "Superhero(id=$id, name='$name', isActive=$isActive, debutDate=$debutDate, popularity=$popularity, powers:\n${showAllPowers()})"
+    fun removePower(powerId: Int): Result<Superhero> {
+        return try {
+            if (powers.none { it.id == powerId }) {
+                throw IllegalArgumentException("No se encontró un poder con el ID $powerId.")
+            }
+            Result.success(copy(powers = powers.filterNot { it.id == powerId }))
+        } catch (e: Exception) {
+            println("Error al eliminar poder: ${e.message}")
+            Result.failure(e)
+        }
     }
 }

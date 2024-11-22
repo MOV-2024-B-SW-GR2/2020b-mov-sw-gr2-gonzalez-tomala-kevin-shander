@@ -4,20 +4,89 @@
         <id>1</id>
         <name>Superman</name>
         <isActive>true</isActive>
-        <debutDate>2024-11-14</debutDate>
+        <debutDate>1938-06-01</debutDate>
+        <popularity>10.0</popularity>
+        <powers>
+            <power>
+                <id>1</id>
+                <name>Flight</name>
+                <description>Ability to fly at high speeds</description>
+                <isOffensive>false</isOffensive>
+                <effectiveness>9.5</effectiveness>
+            </power>
+            <power>
+                <id>2</id>
+                <name>Super Strength</name>
+                <description>Exceptional physical strength</description>
+                <isOffensive>true</isOffensive>
+                <effectiveness>10.0</effectiveness>
+            </power>
+        </powers>
+    </superhero>
+    <superhero>
+        <id>2</id>
+        <name>Batman</name>
+        <isActive>true</isActive>
+        <debutDate>1939-05-01</debutDate>
+        <popularity>9.5</popularity>
+        <powers>
+            <power>
+                <id>1</id>
+                <name>Martial Arts</name>
+                <description>Mastery in various fighting techniques</description>
+                <isOffensive>true</isOffensive>
+                <effectiveness>9.0</effectiveness>
+            </power>
+            <power>
+                <id>2</id>
+                <name>Stealth</name>
+                <description>Ability to move unseen and unheard</description>
+                <isOffensive>false</isOffensive>
+                <effectiveness>8.0</effectiveness>
+            </power>
+        </powers>
+    </superhero>
+    <superhero>
+        <id>3</id>
+        <name>Wonder Woman</name>
+        <isActive>true</isActive>
+        <debutDate>1941-10-01</debutDate>
+        <popularity>9.8</popularity>
+        <powers>
+            <power>
+                <id>1</id>
+                <name>Lasso of Truth</name>
+                <description>Magical lasso that compels anyone it touches to tell the truth</description>
+                <isOffensive>false</isOffensive>
+                <effectiveness>9.2</effectiveness>
+            </power>
+            <power>
+                <id>2</id>
+                <name>Super Agility</name>
+                <description>Extraordinary reflexes and agility</description>
+                <isOffensive>true</isOffensive>
+                <effectiveness>9.3</effectiveness>
+            </power>
+        </powers>
+    </superhero>
+    <superhero>
+        <id>4</id>
+        <name>Flash</name>
+        <isActive>true</isActive>
+        <debutDate>1956-01-01</debutDate>
         <popularity>9.0</popularity>
         <powers>
             <power>
-                <id>2</id>
-                <name>Super Breath</name>
-                <description>Ability to release powerful gusts of wind from his breath, often cold enough to freeze objects</description>
-                <isOffensive>true</isOffensive>
-                <effectiveness>8.5</effectiveness>
+                <id>1</id>
+                <name>Super Speed</name>
+                <description>Ability to move, think, and react at superhuman speeds</description>
+                <isOffensive>false</isOffensive>
+                <effectiveness>9.8</effectiveness>
             </power>
             <power>
-                <id>3</id>
-                <name>X-Ray Vision</name>
-                <description>Ability to see through solid objects except for lead</description>
+                <id>2</id>
+                <name>Time Travel</name>
+                <description>Ability to travel through time using speed</description>
                 <isOffensive>false</isOffensive>
                 <effectiveness>9.0</effectiveness>
             </power>
