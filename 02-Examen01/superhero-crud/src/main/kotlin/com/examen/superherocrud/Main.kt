@@ -7,7 +7,7 @@ import com.examen.superherocrud.repository.SuperheroRepository
 import com.examen.superherocrud.service.SuperheroService
 import com.examen.superherocrud.persistence.XmlParser
 import java.time.LocalDate
-import java.util.Scanner
+import javax.swing.JOptionPane
 
 fun main() {
     val filePath = "src/main/resources/xml/data.xml"
@@ -20,233 +20,175 @@ fun main() {
     // Inicializar el contador de IDs basado en los datos existentes
     Superhero.initializeCounter(controller.getAllSuperheroes())
 
-    val scanner = Scanner(System.`in`)
     while (true) {
         try {
-            showMenu()
-            val option = readInt(scanner)
+            val option = showMenu()
             when (option) {
-                1 -> addSuperhero(scanner, controller)
+                1 -> addSuperhero(controller)
                 2 -> listSuperheroes(controller)
-                3 -> findSuperhero(scanner, controller)
-                4 -> updateSuperhero(scanner, controller)
-                5 -> deleteSuperhero(scanner, controller)
-                6 -> addPowerToSuperhero(scanner, controller)
-                7 -> updateSuperheroPower(scanner, controller)
-                8 -> deletePowerFromSuperhero(scanner, controller)
+                3 -> findSuperhero(controller)
+                4 -> updateSuperhero(controller)
+                5 -> deleteSuperhero(controller)
+                6 -> addPowerToSuperhero(controller)
+                7 -> updateSuperheroPower(controller)
+                8 -> deletePowerFromSuperhero(controller)
                 9 -> {
-                    println("Saliendo del programa...")
-                    break
+                    JOptionPane.showMessageDialog(null, "Saliendo del programa...")
+                    return
                 }
-                else -> println("Opción no válida. Por favor, intenta nuevamente.")
+                else -> JOptionPane.showMessageDialog(null, "Opción no válida. Por favor, intenta nuevamente.")
             }
         } catch (e: Exception) {
-            println("Error inesperado: ${e.message}. Intenta nuevamente.")
+            JOptionPane.showMessageDialog(null, "Error inesperado: ${e.message}. Intenta nuevamente.")
         }
     }
-    scanner.close()
 }
 
-fun showMenu() {
-    println("\n--- Menú CRUD de Superhéroes ---")
-    println("1. Agregar Superhéroe")
-    println("2. Listar Superhéroes")
-    println("3. Buscar Superhéroe por ID")
-    println("4. Actualizar Superhéroe")
-    println("5. Eliminar Superhéroe")
-    println("6. Agregar Poder a Superhéroe Existente")
-    println("7. Actualizar Poder de Superhéroe Existente")
-    println("8. Eliminar Poder de Superhéroe Existente")
-    println("9. Salir")
-    print("Elige una opción: ")
+fun showMenu(): Int {
+    val menu = """
+        --- Menú CRUD de Superhéroes ---
+        1. Agregar Superhéroe
+        2. Listar Superhéroes
+        3. Buscar Superhéroe por ID
+        4. Actualizar Superhéroe
+        5. Eliminar Superhéroe
+        6. Agregar Poder a Superhéroe Existente
+        7. Actualizar Poder de Superhéroe Existente
+        8. Eliminar Poder de Superhéroe Existente
+        9. Salir
+    """.trimIndent()
+    val input = JOptionPane.showInputDialog(menu)
+    return input?.toIntOrNull() ?: -1
 }
 
-fun readInt(scanner: Scanner): Int? {
-    return try {
-        val input = scanner.nextLine()
-        input.toIntOrNull() // Intenta convertir la entrada a un número entero
-    } catch (e: Exception) {
-        null // Retorna null si ocurre un error
-    }
-}
-
-fun addSuperhero(scanner: Scanner, controller: SuperheroController) {
+fun addSuperhero(controller: SuperheroController) {
     try {
-        println("\n--- Agregar Superhéroe ---")
-        print("Nombre: ")
-        val name = scanner.nextLine().takeIf { it.isNotBlank() } ?: throw IllegalArgumentException("El nombre no puede estar vacío.")
-        print("¿Está activo? (true/false): ")
-        val isActive = scanner.nextBoolean()
-        scanner.nextLine()
-        print("Fecha de debut (YYYY-MM-DD): ")
-        val debutDate = LocalDate.parse(scanner.nextLine())
-        print("Popularidad (decimal): ")
-        val popularity = scanner.nextDouble()
-        scanner.nextLine()
+        val name = JOptionPane.showInputDialog("Nombre del Superhéroe:") ?: return
+        val isActive = JOptionPane.showInputDialog("¿Está activo? (true/false):")?.toBoolean() ?: return
+        val debutDate = LocalDate.parse(JOptionPane.showInputDialog("Fecha de debut (YYYY-MM-DD):") ?: return)
+        val popularity = JOptionPane.showInputDialog("Popularidad (decimal):")?.toDouble() ?: return
 
         val powers = mutableListOf<Power>()
         while (true) {
-            println("\n--- Agregar Poder ---")
-            print("Nombre del Poder: ")
-            val powerName = scanner.nextLine().takeIf { it.isNotBlank() } ?: throw IllegalArgumentException("El nombre del poder no puede estar vacío.")
-            print("Descripción del Poder: ")
-            val description = scanner.nextLine()
-            print("¿Es ofensivo? (true/false): ")
-            val isOffensive = scanner.nextBoolean()
-            scanner.nextLine()
-            print("Efectividad (decimal): ")
-            val effectiveness = scanner.nextDouble()
-            scanner.nextLine()
+            val powerName = JOptionPane.showInputDialog("Nombre del Poder:") ?: break
+            val description = JOptionPane.showInputDialog("Descripción del Poder:") ?: ""
+            val isOffensive = JOptionPane.showInputDialog("¿Es ofensivo? (true/false):")?.toBoolean() ?: false
+            val effectiveness = JOptionPane.showInputDialog("Efectividad (decimal):")?.toDouble() ?: 0.0
             powers.add(Power(Power.generateId(), powerName, description, isOffensive, effectiveness))
 
-            print("¿Agregar otro poder? (y/n): ")
-            if (scanner.next().lowercase() != "y") {
-                scanner.nextLine()
-                break
-            } else {
-                scanner.nextLine()
-            }
+            val another = JOptionPane.showConfirmDialog(null, "¿Agregar otro poder?", "Poderes", JOptionPane.YES_NO_OPTION)
+            if (another == JOptionPane.NO_OPTION) break
         }
 
         val superhero = Superhero(0, name, isActive, debutDate, popularity, powers)
         controller.addSuperhero(superhero)
+        JOptionPane.showMessageDialog(null, "Superhéroe agregado exitosamente.")
     } catch (e: Exception) {
-        println("Error al agregar superhéroe: ${e.message}")
+        JOptionPane.showMessageDialog(null, "Error al agregar superhéroe: ${e.message}")
     }
 }
 
 fun listSuperheroes(controller: SuperheroController) {
-    println("\n--- Lista de Superhéroes ---")
     val superheroes = controller.getAllSuperheroes()
     if (superheroes.isEmpty()) {
-        println("No hay superhéroes registrados.")
+        JOptionPane.showMessageDialog(null, "No hay superhéroes registrados.")
     } else {
-        superheroes.forEach { println(it.showDetails()) }
+        val message = superheroes.joinToString("\n") { it.showDetails() }
+        JOptionPane.showMessageDialog(null, message, "Lista de Superhéroes", JOptionPane.INFORMATION_MESSAGE)
     }
 }
 
-fun findSuperhero(scanner: Scanner, controller: SuperheroController) {
-    println("\n--- Buscar Superhéroe por ID ---")
+fun findSuperhero(controller: SuperheroController) {
     try {
-        print("ID del Superhéroe: ")
-        val id = scanner.nextInt()
-        scanner.nextLine()
+        val id = JOptionPane.showInputDialog("ID del Superhéroe:")?.toInt() ?: return
         val superhero = controller.getSuperheroById(id)
         if (superhero != null) {
-            println("Superhéroe encontrado:\n${superhero.showDetails()}")
+            JOptionPane.showMessageDialog(null, "Superhéroe encontrado:\n${superhero.showDetails()}")
+        } else {
+            JOptionPane.showMessageDialog(null, "Superhéroe no encontrado.")
         }
     } catch (e: Exception) {
-        println("Error al buscar superhéroe: ${e.message}")
+        JOptionPane.showMessageDialog(null, "Error al buscar superhéroe: ${e.message}")
     }
 }
 
-fun updateSuperhero(scanner: Scanner, controller: SuperheroController) {
-    println("\n--- Actualizar Superhéroe ---")
+fun updateSuperhero(controller: SuperheroController) {
     try {
-        print("ID del Superhéroe a actualizar: ")
-        val id = scanner.nextInt()
-        scanner.nextLine()
-        val superhero = controller.getSuperheroById(id) ?: return
-
-        print("Nuevo nombre (${superhero.name}): ")
-        val newName = scanner.nextLine().takeIf { it.isNotBlank() } ?: superhero.name
-        print("¿Está activo? (${superhero.isActive}) (true/false): ")
-        val isActive = scanner.nextBoolean()
-        scanner.nextLine()
-        print("Nueva popularidad (${superhero.popularity}): ")
-        val popularity = scanner.nextDouble()
-        scanner.nextLine()
-
-        val updatedSuperhero = superhero.copy(name = newName, isActive = isActive, popularity = popularity)
-        controller.updateSuperhero(updatedSuperhero)
-    } catch (e: Exception) {
-        println("Error al actualizar superhéroe: ${e.message}")
-    }
-}
-
-fun deleteSuperhero(scanner: Scanner, controller: SuperheroController) {
-    println("\n--- Eliminar Superhéroe ---")
-    try {
-        print("ID del Superhéroe a eliminar: ")
-        val id = scanner.nextInt()
-        scanner.nextLine()
-        controller.deleteSuperhero(id)
-    } catch (e: Exception) {
-        println("Error al eliminar superhéroe: ${e.message}")
-    }
-}
-
-fun addPowerToSuperhero(scanner: Scanner, controller: SuperheroController) {
-    println("\n--- Agregar Poder a Superhéroe Existente ---")
-    try {
-        print("ID del Superhéroe: ")
-        val id = scanner.nextInt()
-        scanner.nextLine()
-        val superhero = controller.getSuperheroById(id)
-        if (superhero == null) {
-            println("Superhéroe no encontrado.")
+        val id = JOptionPane.showInputDialog("ID del Superhéroe a actualizar:")?.toInt() ?: return
+        val superhero = controller.getSuperheroById(id) ?: run {
+            JOptionPane.showMessageDialog(null, "Superhéroe no encontrado.")
             return
         }
 
-        println("Agregando nuevo poder al superhéroe ${superhero.name}.")
-        print("Nombre del Poder: ")
-        val powerName = scanner.nextLine()
-        print("Descripción del Poder: ")
-        val description = scanner.nextLine()
-        print("¿Es ofensivo? (true/false): ")
-        val isOffensive = scanner.nextBoolean()
-        scanner.nextLine()
-        print("Efectividad (decimal): ")
-        val effectiveness = scanner.nextDouble()
-        scanner.nextLine()
+        val newName = JOptionPane.showInputDialog("Nuevo nombre (${superhero.name}):") ?: superhero.name
+        val isActive = JOptionPane.showInputDialog("¿Está activo? (${superhero.isActive}) (true/false):")?.toBoolean() ?: superhero.isActive
+        val popularity = JOptionPane.showInputDialog("Nueva popularidad (${superhero.popularity}):")?.toDouble() ?: superhero.popularity
+
+        val updatedSuperhero = superhero.copy(name = newName, isActive = isActive, popularity = popularity)
+        controller.updateSuperhero(updatedSuperhero)
+        JOptionPane.showMessageDialog(null, "Superhéroe actualizado exitosamente.")
+    } catch (e: Exception) {
+        JOptionPane.showMessageDialog(null, "Error al actualizar superhéroe: ${e.message}")
+    }
+}
+
+fun deleteSuperhero(controller: SuperheroController) {
+    try {
+        val id = JOptionPane.showInputDialog("ID del Superhéroe a eliminar:")?.toInt() ?: return
+        controller.deleteSuperhero(id)
+        JOptionPane.showMessageDialog(null, "Superhéroe eliminado exitosamente.")
+    } catch (e: Exception) {
+        JOptionPane.showMessageDialog(null, "Error al eliminar superhéroe: ${e.message}")
+    }
+}
+
+fun addPowerToSuperhero(controller: SuperheroController) {
+    try {
+        val id = JOptionPane.showInputDialog("ID del Superhéroe:")?.toInt() ?: return
+        val superhero = controller.getSuperheroById(id)
+        if (superhero == null) {
+            JOptionPane.showMessageDialog(null, "Superhéroe no encontrado.")
+            return
+        }
+
+        val powerName = JOptionPane.showInputDialog("Nombre del Poder:") ?: return
+        val description = JOptionPane.showInputDialog("Descripción del Poder:") ?: ""
+        val isOffensive = JOptionPane.showInputDialog("¿Es ofensivo? (true/false):")?.toBoolean() ?: false
+        val effectiveness = JOptionPane.showInputDialog("Efectividad (decimal):")?.toDouble() ?: 0.0
 
         val newPower = Power(0, powerName, description, isOffensive, effectiveness)
         val result = superhero.addPower(newPower)
         result.onSuccess { updatedSuperhero ->
             controller.updateSuperhero(updatedSuperhero)
-            println("Poder agregado exitosamente.")
+            JOptionPane.showMessageDialog(null, "Poder agregado exitosamente.")
         }.onFailure { error ->
-            println("Error al agregar el poder: ${error.message}")
+            JOptionPane.showMessageDialog(null, "Error al agregar el poder: ${error.message}")
         }
     } catch (e: Exception) {
-        println("Error al agregar poder: ${e.message}")
+        JOptionPane.showMessageDialog(null, "Error al agregar poder: ${e.message}")
     }
 }
 
-fun updateSuperheroPower(scanner: Scanner, controller: SuperheroController) {
-    println("\n--- Actualizar Poder de Superhéroe Existente ---")
+fun updateSuperheroPower(controller: SuperheroController) {
     try {
-        print("ID del Superhéroe: ")
-        val id = scanner.nextInt()
-        scanner.nextLine()
+        val id = JOptionPane.showInputDialog("ID del Superhéroe:")?.toInt() ?: return
         val superhero = controller.getSuperheroById(id)
         if (superhero == null) {
-            println("Superhéroe no encontrado.")
+            JOptionPane.showMessageDialog(null, "Superhéroe no encontrado.")
             return
         }
 
-        println("Poderes actuales de ${superhero.name}:")
-        superhero.powers.forEach { println(it.showDetails()) }
-
-        print("ID del Poder a actualizar: ")
-        val powerId = scanner.nextInt()
-        scanner.nextLine()
+        val powerId = JOptionPane.showInputDialog("ID del Poder a actualizar:")?.toInt() ?: return
         val power = superhero.powers.find { it.id == powerId }
         if (power == null) {
-            println("Poder no encontrado.")
+            JOptionPane.showMessageDialog(null, "Poder no encontrado.")
             return
         }
 
-        print("Nuevo nombre del Poder: ")
-        val newName = scanner.nextLine()
-        print("Nueva descripción: ")
-        val newDescription = scanner.nextLine()
-        print("¿Es ofensivo? (true/false): ")
-        val newIsOffensive = scanner.nextBoolean()
-        scanner.nextLine()
-        print("Nueva efectividad (decimal): ")
-        val newEffectiveness = scanner.nextDouble()
-        scanner.nextLine()
+        val newName = JOptionPane.showInputDialog("Nuevo nombre del Poder:") ?: power.name
+        val newDescription = JOptionPane.showInputDialog("Nueva descripción:") ?: power.description
+        val newIsOffensive = JOptionPane.showInputDialog("¿Es ofensivo? (true/false):")?.toBoolean() ?: power.isOffensive
+        val newEffectiveness = JOptionPane.showInputDialog("Nueva efectividad (decimal):")?.toDouble() ?: power.effectiveness
 
         val updatedPower = power.copy(
             name = newName,
@@ -257,41 +199,33 @@ fun updateSuperheroPower(scanner: Scanner, controller: SuperheroController) {
         val result = superhero.updatePower(updatedPower)
         result.onSuccess { updatedSuperhero ->
             controller.updateSuperhero(updatedSuperhero)
-            println("Poder actualizado exitosamente.")
+            JOptionPane.showMessageDialog(null, "Poder actualizado exitosamente.")
         }.onFailure { error ->
-            println("Error al actualizar el poder: ${error.message}")
+            JOptionPane.showMessageDialog(null, "Error al actualizar el poder: ${error.message}")
         }
     } catch (e: Exception) {
-        println("Error al actualizar poder: ${e.message}")
+        JOptionPane.showMessageDialog(null, "Error al actualizar poder: ${e.message}")
     }
 }
 
-fun deletePowerFromSuperhero(scanner: Scanner, controller: SuperheroController) {
-    println("\n--- Eliminar Poder de Superhéroe Existente ---")
+fun deletePowerFromSuperhero(controller: SuperheroController) {
     try {
-        print("ID del Superhéroe: ")
-        val id = scanner.nextInt()
-        scanner.nextLine()
+        val id = JOptionPane.showInputDialog("ID del Superhéroe:")?.toInt() ?: return
         val superhero = controller.getSuperheroById(id)
         if (superhero == null) {
-            println("Superhéroe no encontrado.")
+            JOptionPane.showMessageDialog(null, "Superhéroe no encontrado.")
             return
         }
 
-        println("Poderes actuales de ${superhero.name}:")
-        superhero.powers.forEach { println(it.showDetails()) }
-
-        print("ID del Poder a eliminar: ")
-        val powerId = scanner.nextInt()
-        scanner.nextLine()
+        val powerId = JOptionPane.showInputDialog("ID del Poder a eliminar:")?.toInt() ?: return
         val result = superhero.removePower(powerId)
         result.onSuccess { updatedSuperhero ->
             controller.updateSuperhero(updatedSuperhero)
-            println("Poder eliminado exitosamente.")
+            JOptionPane.showMessageDialog(null, "Poder eliminado exitosamente.")
         }.onFailure { error ->
-            println("Error al eliminar el poder: ${error.message}")
+            JOptionPane.showMessageDialog(null, "Error al eliminar el poder: ${error.message}")
         }
     } catch (e: Exception) {
-        println("Error al eliminar poder: ${e.message}")
+        JOptionPane.showMessageDialog(null, "Error al eliminar poder: ${e.message}")
     }
 }
