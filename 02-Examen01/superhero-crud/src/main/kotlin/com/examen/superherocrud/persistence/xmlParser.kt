@@ -65,22 +65,22 @@ class XmlParser(private val filePath: String) {
             for (superhero in superheroes) {
                 val superheroElement = document.createElement("superhero")
 
-                superheroElement.appendChild(createElement(document, "id", superhero.getId().toString()))
-                superheroElement.appendChild(createElement(document, "name", superhero.getName()))
-                superheroElement.appendChild(createElement(document, "isActive", superhero.isActive().toString()))
-                superheroElement.appendChild(createElement(document, "debutDate", superhero.getDebutDate().toString()))
-                superheroElement.appendChild(createElement(document, "popularity", superhero.getPopularity().toString()))
+                superheroElement.appendChild(createElement(document, "id", superhero.id.toString()))
+                superheroElement.appendChild(createElement(document, "name", superhero.name))
+                superheroElement.appendChild(createElement(document, "isActive", superhero.isActive.toString()))
+                superheroElement.appendChild(createElement(document, "debutDate", superhero.debutDate.toString()))
+                superheroElement.appendChild(createElement(document, "popularity", superhero.popularity.toString()))
 
                 // Crear el contenedor de poderes y agregar cada poder como un elemento hijo
                 val powersElement = document.createElement("powers")
-                for (power in superhero.getPowers()) {
+                for (power in superhero.powers) {
                     val powerElement = document.createElement("power")
 
-                    powerElement.appendChild(createElement(document, "id", power.getId().toString()))
-                    powerElement.appendChild(createElement(document, "name", power.getName()))
-                    powerElement.appendChild(createElement(document, "description", power.getDescription()))
-                    powerElement.appendChild(createElement(document, "isOffensive", power.isOffensive().toString()))
-                    powerElement.appendChild(createElement(document, "effectiveness", power.getEffectiveness().toString()))
+                    powerElement.appendChild(createElement(document, "id", power.id.toString()))
+                    powerElement.appendChild(createElement(document, "name", power.name))
+                    powerElement.appendChild(createElement(document, "description", power.description))
+                    powerElement.appendChild(createElement(document, "isOffensive", power.isOffensive.toString()))
+                    powerElement.appendChild(createElement(document, "effectiveness", power.effectiveness.toString()))
 
                     powersElement.appendChild(powerElement) // Agregar cada poder al contenedor de poderes
                 }
