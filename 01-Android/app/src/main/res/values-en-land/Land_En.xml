@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="changeText">Land in english</string>
+    <color name="colorBackground">#2196F3</color>
+    <color name="colorText">#B65D37</color>
+</resources>
