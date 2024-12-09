@@ -1,7 +1,7 @@
 package com.examen.superherocrud.repository
 
 import com.examen.superherocrud.model.Superhero
-import com.examen.superherocrud.persistence.XmlParser
+import com.examen.superherocrud.xml.XmlParser
 
 // Clase que se encarga de la persistencia de datos usando el archivo XML.
 class SuperheroRepository(private val xmlParser: XmlParser) {
