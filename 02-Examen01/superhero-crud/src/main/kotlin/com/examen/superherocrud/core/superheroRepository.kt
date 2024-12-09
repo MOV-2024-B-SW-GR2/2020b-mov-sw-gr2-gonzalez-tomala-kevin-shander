@@ -1,4 +1,4 @@
-package com.examen.superherocrud.repository
+package com.examen.superherocrud.core
 
 import com.examen.superherocrud.model.Superhero
 import com.examen.superherocrud.xml.XmlParser

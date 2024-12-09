@@ -1,8 +1,7 @@
-package com.examen.superherocrud.service
+package com.examen.superherocrud.core
 
 import com.examen.superherocrud.model.Superhero
 import com.examen.superherocrud.model.Power
-import com.examen.superherocrud.repository.SuperheroRepository
 
 class SuperheroService(private val repository: SuperheroRepository) {
 

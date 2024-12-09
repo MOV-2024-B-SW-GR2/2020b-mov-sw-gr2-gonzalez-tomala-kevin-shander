@@ -1,4 +1,4 @@
-package com.examen.superherocrud.persistence
+package com.examen.superherocrud.xml
 
 import com.examen.superherocrud.model.Superhero
 import com.examen.superherocrud.model.Power

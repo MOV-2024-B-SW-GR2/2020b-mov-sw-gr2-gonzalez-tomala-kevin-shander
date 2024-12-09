@@ -1,11 +1,11 @@
 package org.example.com.examen.superherocrud
 
-import com.examen.superherocrud.controller.SuperheroController
+import com.examen.superherocrud.core.SuperheroController
 import com.examen.superherocrud.model.Power
 import com.examen.superherocrud.model.Superhero
-import com.examen.superherocrud.repository.SuperheroRepository
-import com.examen.superherocrud.service.SuperheroService
-import com.examen.superherocrud.persistence.XmlParser
+import com.examen.superherocrud.core.SuperheroRepository
+import com.examen.superherocrud.core.SuperheroService
+import com.examen.superherocrud.xml.XmlParser
 import java.time.LocalDate
 import javax.swing.JOptionPane
 

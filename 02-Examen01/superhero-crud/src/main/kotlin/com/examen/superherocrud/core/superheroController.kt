@@ -1,7 +1,6 @@
-package com.examen.superherocrud.controller
+package com.examen.superherocrud.core
 
 import com.examen.superherocrud.model.Superhero
-import com.examen.superherocrud.service.SuperheroService
 
 // Clase que se encarga de manejar las peticiones de los usuarios.
 class SuperheroController(private val service: SuperheroService) {
