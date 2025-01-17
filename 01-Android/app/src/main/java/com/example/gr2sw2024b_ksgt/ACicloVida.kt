@@ -17,53 +17,66 @@ class ACicloVida : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        mostrarMensaje("onCreate")
+        mostrarSnackbar("OnCreate")
     }
 
-    override fun onStart() {
+    override fun onStart(){
         super.onStart()
-        mostrarMensaje("onStart\n")
+        mostrarSnackbar("OnStart")
     }
 
-    override fun onResume() {
+    override fun onResume(){
         super.onResume()
-        mostrarMensaje("onResume\n")
+        mostrarSnackbar("OnResume")
     }
 
-    override fun onPause() {
+    override fun onRestart(){
+        super.onRestart()
+        mostrarSnackbar("onRestart")
+    }
+
+    override fun onPause(){
         super.onPause()
-        mostrarMensaje("onPause\n")
+        mostrarSnackbar("onPause")
     }
 
-    override fun onStop() {
+    override fun onStop(){
         super.onStop()
-        mostrarMensaje("onStop\n")
+        mostrarSnackbar("onStop")
     }
 
-    override fun onDestroy() {
+    override fun onDestroy(){
         super.onDestroy()
-        mostrarMensaje("onDestroy\n")
+        mostrarSnackbar("onDestroy")
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
-        outState.run { putString("variableTextoGuardado", textoGlobal) }
+        outState.run {
+            // Guardamos las variables
+            putString("variableTextoGuardado", textoGlobal)
+        }
         super.onSaveInstanceState(outState)
-
     }
 
     override fun onRestoreInstanceState(savedInstanceState: Bundle) {
         super.onRestoreInstanceState(savedInstanceState)
-
-        val textoRecuperado = savedInstanceState.getString("variableTextoGuardado")
-        if(textoRecuperado != null) {
-            mostrarMensaje(textoRecuperado)
+        // Recuperar las variables
+        val textoRecuperado: String? = savedInstanceState.getString("variableTextoGuardado")
+        if(textoRecuperado != null){
+            mostrarSnackbar(textoRecuperado)
         }
     }
 
+
+
     var textoGlobal = ""
-    fun mostrarMensaje(texto: String) {
+    fun mostrarSnackbar(texto: String){
         textoGlobal += texto
-        var snack = Snackbar.make(findViewById(R.id.cl_ciclo_vida), textoGlobal, Snackbar.LENGTH_INDEFINITE)
+        var snack = Snackbar.make(
+            findViewById(R.id.cl_ciclo_vida),
+            textoGlobal,
+            Snackbar.LENGTH_INDEFINITE
+        )
         snack.show()
     }
 }

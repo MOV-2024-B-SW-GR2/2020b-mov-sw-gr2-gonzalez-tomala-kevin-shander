@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">gr2sw2024b_ksgt</string>
-    <string name="changeText">Por defecto</string>
-    <color name="colorBackground">#FFFFFF</color>
-    <color name="colorText">#000000</color>
+    <string name="saludo">Hello Friends</string>
+    <color name="saludo_color">#964B00</color>
+    <string-array name="string_array_opciones_dialogo">
+        <item>Lunes</item>
+        <item>Martes</item>
+        <item>Miercoles</item>
+    </string-array>
 </resources>
