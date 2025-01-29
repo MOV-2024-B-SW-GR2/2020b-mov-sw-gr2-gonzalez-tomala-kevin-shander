@@ -82,10 +82,17 @@ class MainActivity : AppCompatActivity() {
                 )
                 callbackContenidoIntentExplicito.launch(intentExplicito)
             }
+
         val botonSqlite = findViewById<Button>(R.id.btn_sqlite)
         botonSqlite
             .setOnClickListener {
                 irActividad(ECrudEntrenador::class.java)
+            }
+
+        val botonGMaps = findViewById<Button>(R.id.btn_google_maps)
+        botonGMaps
+            .setOnClickListener {
+                irActividad(GGoogleMaps::class.java)
             }
     }
 
