@@ -16,6 +16,9 @@
         android:theme="@style/Theme.Gr2sw2024b_ksgt"
         tools:targetApi="31">
         <activity
+            android:name=".HFirebaseUiAuth"
+            android:exported="false" />
+        <activity
             android:name=".GGoogleMaps"
             android:exported="false" />
         <!--
