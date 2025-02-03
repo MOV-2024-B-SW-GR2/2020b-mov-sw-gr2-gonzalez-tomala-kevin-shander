@@ -11,4 +11,7 @@
     <item
         android:id="@+id/mis_poderes"
         android:title="Ver poderes" />
+    <item
+        android:id="@+id/route_mapa"
+        android:title="Ver mapa" />
 </menu>

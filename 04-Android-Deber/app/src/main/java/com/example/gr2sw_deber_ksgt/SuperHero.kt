@@ -11,12 +11,21 @@ class SuperHero (
     val isActive: Boolean,
     val debutDate: LocalDate,
     val popularity: Double,
+    val latitude: Double,
+    val longitude: Double
 ): Parcelable {
+    val latitud: Double
+        get() = latitude
+    val longitud: Double
+        get() = longitude
+
     constructor(parcel: Parcel) : this(
         parcel.readInt(),
         parcel.readString()!!,
         parcel.readByte() != 0.toByte(),
         LocalDate.parse(parcel.readString(), DateTimeFormatter.ISO_DATE),
+        parcel.readDouble(),
+        parcel.readDouble(),
         parcel.readDouble()
     ) {
     }
@@ -31,6 +40,8 @@ class SuperHero (
         parcel.writeByte(if (isActive) 1 else 0)
         parcel.writeString(debutDate.format(DateTimeFormatter.ISO_DATE))
         parcel.writeDouble(popularity)
+        parcel.writeDouble(latitude)
+        parcel.writeDouble(longitude)
     }
 
     override fun describeContents(): Int {

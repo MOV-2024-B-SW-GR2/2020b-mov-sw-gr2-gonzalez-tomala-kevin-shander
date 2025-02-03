@@ -66,6 +66,7 @@ class PListView : AppCompatActivity() {
         val inflater = menuInflater
         inflater.inflate(R.menu.menu, menu)
         menu?.findItem(R.id.mis_poderes)?.isVisible = false
+        menu?.findItem(R.id.route_mapa)?.isVisible = false
         val info = menuInfo as AdapterView.AdapterContextMenuInfo
         val posicion = info.position
         posicionItemSeleccionado = posicion

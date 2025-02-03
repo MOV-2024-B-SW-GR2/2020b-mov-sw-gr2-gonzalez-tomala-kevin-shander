@@ -42,6 +42,8 @@ class CrudSuperhero : AppCompatActivity() {
         val switchActivo = findViewById<Switch>(R.id.switch_active)
         val inputFecha = findViewById<EditText>(R.id.input_date)
         val inputPopularidad = findViewById<EditText>(R.id.input_popularity)
+        val inputLatitude = findViewById<EditText>(R.id.txt_latitude)
+        val inputLongitude = findViewById<EditText>(R.id.txt_longitude)
 
         if (modo == "editar" && superHero != null) {
             // Configurar campos con los datos del superhéroe
@@ -49,6 +51,8 @@ class CrudSuperhero : AppCompatActivity() {
             switchActivo.isChecked = superHero.isActive
             inputFecha.setText(superHero.debutDate.toString())
             inputPopularidad.setText(superHero.popularity.toString())
+            inputLatitude.setText(superHero.latitude.toString())
+            inputLongitude.setText(superHero.longitude.toString())
             botonGuardarSuperheroBDD.text = "Actualizar"
         } else {
             botonGuardarSuperheroBDD.text = "Crear"
@@ -59,6 +63,8 @@ class CrudSuperhero : AppCompatActivity() {
             val isActive = switchActivo.isChecked
             val debutDateString = inputFecha.text.toString().trim()
             val popularityString = inputPopularidad.text.toString().trim()
+            val latitudeString = inputLatitude.text.toString().trim()
+            val longitudeString = inputLongitude.text.toString().trim()
 
             // Validar entradas
             if (nombre.isEmpty() || debutDateString.isEmpty() || popularityString.isEmpty()) {
@@ -76,8 +82,14 @@ class CrudSuperhero : AppCompatActivity() {
 
             // Intentar convertir popularidad a número
             val popularity = popularityString.toDoubleOrNull()
+            val latitude = latitudeString.toDoubleOrNull()
+            val longitude = longitudeString.toDoubleOrNull()
             if (popularity == null || popularity < 0) {
                 mostrarSnackbar("Por favor, ingresa un valor válido para la popularidad.")
+                return@setOnClickListener
+            }
+            if(latitude == null || longitude == null){
+                mostrarSnackbar("Por favor, ingresa valores válidos para la latitud y longitud.")
                 return@setOnClickListener
             }
 
@@ -86,7 +98,9 @@ class CrudSuperhero : AppCompatActivity() {
                     nombre,
                     isActive,
                     debutDate,
-                    popularity
+                    popularity,
+                    latitude,
+                    longitude
                 )
 
                 if (respuesta == true) {
@@ -102,7 +116,9 @@ class CrudSuperhero : AppCompatActivity() {
                     isActive,
                     debutDate,
                     popularity,
-                    superHero.id
+                    superHero.id,
+                    latitude,
+                    longitude,
                 )
 
                 if (respuesta == true) {

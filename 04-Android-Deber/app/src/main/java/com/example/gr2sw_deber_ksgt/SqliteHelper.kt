@@ -24,7 +24,9 @@ class SqliteHelper(
                     nombre VARCHAR(50),
                     isActive BOOLEAN,
                     debutDate TEXT,
-                    popularity DECIMAL(3, 1)
+                    popularity DECIMAL(3, 1),
+                    latitude REAL,
+                    longitude REAL
                 )
             """.trimIndent()
         db?.execSQL(scriptSQLCrearTablaSuperhero)
@@ -60,6 +62,8 @@ class SqliteHelper(
                 val isActive = resultadoConsultaLectura.getInt(2) == 1
                 val debutDateString = resultadoConsultaLectura.getString(3)
                 val popularity = resultadoConsultaLectura.getDouble(4)
+                val latitude = resultadoConsultaLectura.getDouble(5)
+                val longitude = resultadoConsultaLectura.getDouble(6)
 
                 val debutDate = LocalDate.parse(debutDateString)
 
@@ -68,7 +72,9 @@ class SqliteHelper(
                     nombre,
                     isActive,
                     debutDate,
-                    popularity
+                    popularity,
+                    latitude,
+                    longitude
                 )
                 listaSuperheroes.add(superhero)
             } while (resultadoConsultaLectura.moveToNext())
@@ -83,7 +89,9 @@ class SqliteHelper(
         nombre: String,
         isActive: Boolean,
         debutDate: LocalDate,
-        popularity: Double
+        popularity: Double,
+        latitude: Double,
+        longitude: Double
     ): Boolean {
         val baseDatosEscritura = writableDatabase
         val valoresGuardar = ContentValues()
@@ -91,6 +99,8 @@ class SqliteHelper(
         valoresGuardar.put("isActive", isActive)
         valoresGuardar.put("debutDate", debutDate.format(DateTimeFormatter.ISO_DATE))
         valoresGuardar.put("popularity", popularity)
+        valoresGuardar.put("latitude", latitude)
+        valoresGuardar.put("longitude", longitude)
         val resultadoGuardar = baseDatosEscritura
             .insert(
                 "SUPERHERO", // nombre tabla
@@ -122,7 +132,7 @@ class SqliteHelper(
     fun actualizarSuperhero(
         nombre: String, isActive: Boolean,
         debutDate: LocalDate, popularity: Double,
-        id: Int
+        id: Int, latitude: Double, longitude: Double
     ): Boolean {
 
         val baseDatosEscritura = writableDatabase
@@ -131,6 +141,8 @@ class SqliteHelper(
         valoresAActualizar.put("isActive", isActive)
         valoresAActualizar.put("debutDate", debutDate.format(DateTimeFormatter.ISO_DATE))
         valoresAActualizar.put("popularity", popularity)
+        valoresAActualizar.put("latitude", latitude)
+        valoresAActualizar.put("longitude", longitude)
         val parametrosConsultaUpdate = arrayOf(id.toString())
         val resultadoActualizar = baseDatosEscritura
             .update(

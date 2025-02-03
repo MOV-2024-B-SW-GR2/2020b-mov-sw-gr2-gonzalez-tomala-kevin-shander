@@ -88,6 +88,11 @@ class SListView : AppCompatActivity() {
                 irActividad(PListView::class.java, superHeroSeleccionado)
                 return true
             }
+            R.id.route_mapa -> {
+                val superHeroSeleccionado = listaSuperheroes[posicionItemSeleccionado]
+                irActividad(GgoogleMaps::class.java, superHeroSeleccionado)
+                return true
+            }
             else -> super.onContextItemSelected(item)
         }
     }
